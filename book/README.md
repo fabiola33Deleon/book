@@ -1,3 +1,6 @@
+## VIdeo Explicando
+https://drive.google.com/file/d/1bzNY4q9-JELmJpYaz2UkuXUBbRv230Sj/view?usp=sharing
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
@@ -17,7 +20,7 @@ If you are developing a production application, we recommend using TypeScript wi
 **Descripción**
 Esta es una aplicación de gestión de libros desarrollada con **React**. Permite agregar, editar y eliminar libros con validaciones en los formularios y almacenamiento en una API. 
 
-## 🔧 **Tecnologías y Librerías Utilizadas**
+##  **Tecnologías y Librerías Utilizadas**
 **React.js** | Biblioteca para la creación de interfaces de usuario interactivas. 
 **React Router** | Manejo de rutas para navegar entre vistas. 
 **React Hook Form** | Manejo eficiente de formularios con validaciones. 
