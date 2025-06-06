@@ -1,76 +1,166 @@
 import { Link } from "react-router-dom";
 import Titulo from "../components/Titulos";
 import InputText from "../components/InputText";
-import SelectInput from "../components/SelectInput";
+import SelectInput from "../components/SelectInput.";
 import Button from "../components/Button";
+import { useForm } from "react-hook-form";
+import UseDataLibros from "../hooks/Libros/UseDataLibros";
+import { optionSelect } from "../utils/apiUrl";
 
-const AgregarLibro = () => {
-  const { imagePreviews, handleImageChange, removeImageAtIndex } = useManageImage();
+const Libros = () => {
 
-  return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <Link
-        to="/libros"
-        className="text-2xl font-bold text-gray-900 mb-4 bg-green-100 p-2 rounded w-auto text-center hover:bg-green-200 transition-colors"
-      >
-        Volver a la lista de libros
+  const methods = useForm();
+  const{
+    register,
+    handleSubmit,
+    errors,
+  } = UseDataLibros(methods);
+ 
+ return (
+    <div style={styles.container}>
+      <Link to="/home" style={styles.link}>
+        Back To Dashboard
       </Link>
+      <form onSubmit={handleSubmit} style={styles.form}>
+        <Titulo titulo="Libros" />
+        <p style={styles.paragraph}>Todos los libros</p>
 
-      <form className="border-b border-gray-900/10 pb-12 bg-white shadow-md rounded-lg flex flex-col p-4">
-        <Titulo titulo="Agregar Nuevo Libro" />
-
-        <p className="mt-1 text-sm text-gray-600">
-          Ingrese la información del libro para agregarlo a su biblioteca.
-        </p>
-
-        <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-          {/* Autor */}
+        <div style={styles.grid}>
           <InputText
             type="text"
-            name="autor"
+            name="Libro"
+            label="Libro"
+            placeholder="Escribe el nombre del libro"
+            register={register}
+            errors={errors}
+            style={styles.input}
+          />
+
+          <InputText
+            type="text"
+            name="Autor"
             label="Autor"
-            placeholder="Ingrese el nombre del autor"
-            value=""
-            onChange={() => {}}
+            placeholder="Escribe el nombre del autor"
+            register={register}
+            errors={errors}
+            style={styles.input}
           />
 
-          {/* Título */}
           <InputText
             type="text"
-            name="titulo"
-            label="Título"
-            placeholder="Ingrese el nombre del libro"
-            value=""
-            onChange={() => {}}
-          />
-
-          {/* Estado */}
-          <SelectInput
-            label="Estado de Lectura"
-            options={[
-              { value: "Leído", label: "Leído" },
-              { value: "Leyendo", label: "Leyendo" },
-              { value: "Pendiente", label: "Pendiente" },
-            ]}
-            value=""
-            onChange={() => {}}
-          />
-
-          {/* Género */}
-          <InputText
-            type="text"
-            name="genero"
+            name="Genero"
             label="Género"
-            placeholder="Ingrese el género del libro (Ej. Ficción, Acción)"
-            value=""
-            onChange={() => {}}
+            placeholder="Escribe el género del libro"
+            register={register}
+            errors={errors}
+            style={styles.input}
+          />
+
+          <InputText
+            type="text"
+            name="Año"
+            label="Año"
+            placeholder="Escribe el año del libro"
+            register={register}
+            errors={errors}
+            style={styles.input}
+          />
+
+          <SelectInput
+            label="Estado"
+            options={optionSelect}
+            register={register}
+            errors={errors}
+            name="Estado"
+            style={styles.select}
           />
         </div>
-
-        <Button type="submit" text="Guardar Libro" onClick={null} />
+        <Button type="submit" text="Save Libros" style={styles.button} />
       </form>
     </div>
   );
 };
 
-export default AgregarLibro;
+// Estilos en objeto CSS
+const styles = {
+  container: {
+    maxWidth: "3000px",
+    margin: "auto",
+    padding: "30px",
+    height: "100vh",
+    backgroundImage: "url('https://i.pinimg.com/736x/30/9a/b7/309ab77f8bba4414d777e3bb5867e08b.jpg')",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+  },
+  link: {
+    fontSize: "25px",
+    fontWeight: "bold",
+    color: "#333",
+    textAlign: "center",
+    display: "block",
+    backgroundColor: "#d4edda",
+    padding: "12px",
+    borderRadius: "6px",
+    transition: "background-color 0.3s ease",
+    marginBottom: "20px",
+  },
+  form: {
+    paddingBottom: "50px",
+    backgroundColor: "#b89f8b",
+    boxShadow: "3px 3px 15px rgba(0,0,0,0.1)",
+    borderRadius: "10px",
+    display: "flex",
+    flexDirection: "column",
+    padding: "30px",
+  },
+  paragraph: {
+    marginBottom: "15px",
+    fontSize: "16px",
+    color: "#666",
+  },
+  grid: {
+    marginTop: "20px",
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: "20px",
+  },
+ label: {
+    fontSize: "14px",
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: "5px",
+    display: "block",
+  },
+
+  input: {
+    fontSize: "18px",
+    padding: "20px 8px", // Más alto y más corto
+    borderRadius: "8px",
+    border: "2px solid #ccc",
+    width: "80%", // Lo hice más corto en ancho
+  },
+
+   select: {
+    fontSize: "18px",
+    padding: "20px 8px", // Ajuste de altura
+    borderRadius: "8px",
+    border: "2px solid #ccc",
+    width: "80%", // Más corto en ancho
+    backgroundColor: "#fff",
+  },
+
+  button: {
+    marginTop: "15px",
+    fontSize: "18px",
+    padding: "10px",
+    borderRadius: "10px",
+    backgroundColor: "#28a745",
+    color: "#fff",
+    border: "none",
+    cursor: "pointer",
+    transition: "background-color 0.3s ease",
+  },
+};
+
+export default Libros;

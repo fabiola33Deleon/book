@@ -1,116 +1,124 @@
-import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import ButtonEdit from "../components/ButtonEdit";
-import ButtonDelete from "../components/ButtonDelet";
-imp
+import Titulo from "../components/Titulos";
+import Button from "../components/Button";
+import UseFetchLibros from "../hooks/Libros/UseFetchLibros";
+import { optionSelect } from "../utils/apiUrl";
+import UseLibrosActions from "../hooks/Libros/UseLibrosActions";
 
-const users = [
-  {
-    id: 1,
-    autor: "Isabel Allende",
-    libro: "La Casa de los Espíritus",
-    estado: "Leyendo", // Estado fijo (no editable)
-    genero: "Acción",
-  },
-];
 
 const Home = () => {
-  const [userData] = useState(users); // No se puede modificar
-
-  const styles = {
-  container: {
-    width: "100vw", // Ocupa todo el ancho de la pantalla
-    height: "100vh", // Mantiene la altura completa
-    margin: "auto",
-    padding: "15px",
-    backgroundImage: "url('https://source.unsplash.com/1920x600/?books')", // Imagen más horizontal
-    backgroundSize: "100% auto", // Mantiene proporción horizontal sin distorsión
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-    table: {
-      width: "100%",
-      borderCollapse: "collapse",
-      borderRadius: "10px",
-      overflow: "hidden",
-      backgroundColor: "rgba(255, 255, 255, 0.9)", // Fondo semi-transparente
-      padding: "20px",
-      borderRadius: "10px",
-    },
-    thTd: {
-      padding: "12px",
-      borderBottom: "1px solid #ddd",
-      textAlign: "left",
-    },
-    header: {
-      backgroundColor: "#f4f4f4",
-      color: "#333",
-      fontWeight: "bold",
-    },
-    buttonsContainer: {
-      display: "flex",
-      gap: "15px", // Espaciado entre botones
-      justifyContent: "center",
-    },
-  };
+  const { Libros, getLibros } = UseFetchLibros();
+  const { deleteLibros, handleUpdateLibros } = UseLibrosActions(getLibros);
 
   return (
     <div style={styles.container}>
-      <Link
-        to="/Libros"
-        style={{
-          display: "block",
-          textAlign: "center",
-          backgroundColor: "#4CAF50",
-          color: "white",
-          padding: "10px",
-          borderRadius: "5px",
-          textDecoration: "none",
-          fontWeight: "bold",
-          marginBottom: "20px",
-          transition: "background-color 0.3s",
-        }}
-      >
-        Agregar Libros
+      <Link to="/Libros" style={styles.link}>
+        Agregar Libro
       </Link>
 
-      <h2 style={{ textAlign: "center", marginBottom: "10px", color: "white" }}>
-        Lista de Libros Registrados
-      </h2>
+      <Titulo titulo="Libros Information" />
 
-      <table style={styles.table}>
-        <thead style={styles.header}>
-          <tr>
-            <th style={styles.thTd}>Autor</th>
-            <th style={styles.thTd}>Libro</th>
-            <th style={styles.thTd}>Estado</th>
-            <th style={styles.thTd}>Género</th>
-            <th style={styles.thTd}>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {userData.map((user) => (
-            <tr key={user.id}>
-              <td style={styles.thTd}>{user.autor}</td>
-              <td style={styles.thTd}>{user.libro}</td>
-              <td style={styles.thTd}>{user.estado}</td>
-              <td style={styles.thTd}>{user.genero}</td>
-              <td style={styles.thTd}>
-                <div style={styles.buttonsContainer}>
-                  <ButtonEdit onClick={() => alert(`Editando ${user.libro}`)} />
-                  <ButtonDelete onClick={() => alert(`Eliminando ${user.libro}`)} />
-                </div>
-              </td>
+      <p style={styles.paragraph}>Lista de Libros registrados.</p>
+
+      <div style={styles.tableContainer}>
+        <table style={styles.table}>
+          <thead style={styles.thead}>
+            <tr>
+              <th style={styles.th}>Libro</th>
+              <th style={styles.th}>Autor</th>
+              <th style={styles.th}>Género</th>
+              <th style={styles.th}>Año</th>
+              <th style={styles.th}>Estado</th>
+              <th style={styles.th}>Acciones</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {Libros?.map((libro) => (
+              <tr key={libro.id} style={styles.tr}>
+                <td style={styles.td}>{libro.Libro}</td>
+                <td style={styles.td}>{libro.Autor}</td>
+                <td style={styles.td}>{libro.Genero}</td>
+                <td style={styles.td}>{libro.Año}</td>
+                <td style={styles.td}>
+                  {optionSelect.find((opt) => opt.value === libro.Estado)?.label}
+                </td>
+                <td style={styles.td}>
+                  <div style={styles.buttonContainer}>
+                    <Button text="Editar" onClick={() => handleUpdateLibros(libro.id)} />
+                    <Button text="Eliminar" onClick={() => deleteLibros(libro.id)} />
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
+};
+
+// Estilos en objeto CSS
+const styles = {
+  container: {
+    maxWidth: "3000px",
+    margin: "auto",
+    padding: "100px",
+    height: "100vh",
+    backgroundImage: "url('https://i.pinimg.com/736x/30/9a/b7/309ab77f8bba4414d777e3bb5867e08b.jpg')",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+
+  },
+  link: {
+    fontSize: "20px",
+    fontWeight: "bold",
+    color: "#333",
+    textAlign: "center",
+    display: "block",
+    backgroundColor: "#d4edda",
+    padding: "10px",
+    borderRadius: "5px",
+    transition: "background-color 0.3s ease",
+    marginBottom: "20px",
+  },
+  paragraph: {
+    marginBottom: "10px",
+    fontSize: "14px",
+    color: "#666",
+  },
+  tableContainer: {
+    overflowX: "auto",
+    boxShadow: "2px 2px 10px rgba(0,0,0,0.1)",
+    borderRadius: "8px",
+  },
+  table: {
+    width: "100%",
+    backgroundColor: "#fff",
+    borderCollapse: "collapse",
+  },
+  thead: {
+    backgroundColor: "#f0f0f0",
+    color: "#333",
+  },
+  th: {
+    padding: "12px",
+    textAlign: "left",
+    borderBottom: "2px solid #ddd",
+    fontSize: "14px",
+  },
+  tr: {
+    borderBottom: "1px solid #ddd",
+    transition: "background-color 0.3s ease",
+  },
+  td: {
+    padding: "12px",
+    fontSize: "14px",
+  },
+  buttonContainer: {
+    display: "flex",
+    gap: "20px", // Espacio entre botones
+  },
 };
 
 export default Home;
